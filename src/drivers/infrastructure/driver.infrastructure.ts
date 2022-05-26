@@ -2,44 +2,27 @@ import { DriverModel } from "../domain/models/driver.model";
 import { DriverRepository } from "../domain/repositories/driver.repository";
 import { BaseInfrastructure } from "../../shared/infrastructure/base-infrastructure";
 import { DriverEntity } from "../domain/models/driver.entity";
-import DatabaseBootstrap from "../../bootstrap/database.bootstrap";
+import Result from "src/shared/application/interfaces/result.interface";
+import DatabaseBootstrap from "src/bootstrap/database.bootstrap";
+import { Repository } from "typeorm";
+import { ResponseDto } from "src/shared/application/interfaces/dtos/response.dto";
 
 export class DriverInfrastructure
-  extends BaseInfrastructure<DriverModel, number>
+  extends BaseInfrastructure<DriverModel>
   implements DriverRepository
 {
-  override findAll(
-    where: {
-      [s: string]: string | number | boolean;
-    } = null,
-    order: { [s: string]: string } = null
-  ): Promise<DriverModel[]> {
-    const dataSource = DatabaseBootstrap.dataSource;
-    const repository = dataSource.getRepository(DriverEntity);
-    return repository.find({ where: where || {}, order: order || {} });
+  constructor() {
+    super(DriverEntity);
   }
 
-  override insert(driver: DriverModel): Promise<DriverModel> {
+  async getAll(where: object = {}): Promise<Result<DriverModel>> {
     const dataSource = DatabaseBootstrap.dataSource;
-    const repository = dataSource.getRepository(DriverEntity);
-    return repository.save(driver);
-  }
+    const repository: Repository<DriverModel> =
+      dataSource.getRepository(DriverEntity);
 
-  override async update(driver: DriverModel): Promise<DriverModel> {
-    const dataSource = DatabaseBootstrap.dataSource;
-    const repository = dataSource.getRepository(DriverEntity);
-    const driverToUpdated = await repository.findOneBy({ id: driver.id });
-    delete driver.id;
-    Object.assign(driverToUpdated, driver);
-    return repository.save(driverToUpdated);
-  }
+    const data: DriverModel[] = await repository.find({ where });
 
-  override async delete(id: number): Promise<DriverModel> {
-    const dataSource = DatabaseBootstrap.dataSource;
-    const repository = dataSource.getRepository(DriverEntity);
-    const driverToDelete = await repository.findOneBy({ id });
-    driverToDelete.active = false;
-    return repository.save(driverToDelete);
+    return ResponseDto("", data);
   }
 
   reportByDriver(id: number): Promise<DriverModel[]> {
