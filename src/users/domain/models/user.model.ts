@@ -1,6 +1,4 @@
-import { RoleEntity } from "src/roles/domain/models/role.entity";
-import { RoleModel } from "src/roles/domain/models/role.model";
-
+import { RoleEntity } from "../../../roles/domain/models/role.entity";
 export class UserModel {
   constructor(
     public id: number,
@@ -10,6 +8,7 @@ export class UserModel {
     public email: string,
     public password: string,
     public refreshToken: string,
+    public photo: string,
     public roles: number[] | string[] | RoleEntity[],
     public createdAt: Date,
     public updatedAt: Date | null,

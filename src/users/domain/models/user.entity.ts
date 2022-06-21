@@ -1,4 +1,4 @@
-import { RoleEntity } from "src/roles/domain/models/role.entity";
+import { RoleEntity } from "../../../roles/domain/models/role.entity";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -29,6 +29,9 @@ export class UserEntity {
 
   @Column({ type: "varchar", length: 100 })
   refreshToken: string;
+
+  @Column({ type: "varchar", length: 100 })
+  photo: string;
 
   @Column({ type: "datetime" })
   createdAt: Date;
