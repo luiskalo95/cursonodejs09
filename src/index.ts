@@ -5,14 +5,14 @@ import { Logger } from './shared/helpers/logging.helper';
 
 const serverBootstrap = new ServerBootstrap();
 const databaseBootstrap = new DatabaseBootstrap();
-const redisBootstrap = new RedisBootstrap();
+/* const redisBootstrap = new RedisBootstrap(); */
 
 (async () => {
   try {
     const tasks = [
       serverBootstrap.initialize(),
       databaseBootstrap.initializeDB(),
-      redisBootstrap.initialize(),
+      /* redisBootstrap.initialize(), */
     ];
     await Promise.all(tasks);
     console.log('Connected to database');

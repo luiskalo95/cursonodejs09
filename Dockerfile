@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/node:lts as STAGE_BUILD
+FROM node:16.13-alpine3.15 as STAGE_BUILD
 
 WORKDIR /code
 
@@ -12,7 +12,7 @@ RUN npm run build
 
 # CMD ["npm", "run", "start"]
 
-FROM public.ecr.aws/docker/library/node:lts
+FROM node:16.13-alpine3.15 
 
 WORKDIR /app
 
