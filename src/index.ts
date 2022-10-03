@@ -22,7 +22,7 @@ const databaseBootstrap = new DatabaseBootstrap();
   } catch (error) {
     // Logger(error);
     databaseBootstrap.closeConnection();
-    redisBootstrap.getConnection().disconnect();
+    /* redisBootstrap.getConnection().disconnect(); */
     console.log('Error', error);
     process.exit(1);
   }
