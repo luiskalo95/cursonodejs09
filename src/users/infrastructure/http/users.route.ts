@@ -5,6 +5,8 @@ import { BaseRouter } from '../../../shared/interfaces/base-router';
 import { RoleInfrastructure } from '../../../roles/infrastructure/role.infrastructure';
 import CacheRedis from '../../../shared/helpers/cache.helper';
 import { HandlerErrors } from '../../../shared/helpers/errors.helper';
+import { Authentication } from '../../../shared/middlewares/authentication.guard';
+import { Authorization } from '../../../shared/middlewares/authorization.guard';
 import {
   FactoryAWS,
   FactoryAzure,
@@ -32,6 +34,8 @@ class UserRouter extends BaseRouter {
   override mountRoutesCommons(): void {
     this.expressRouter.get(
       '/',
+      Authentication.canActivate,
+      Authorization.canActivate('ADMIN'),
       CacheRedis.handle(this.tagName),
       HandlerErrors.catchError(userController.list)
     );
@@ -43,16 +47,22 @@ class UserRouter extends BaseRouter {
 
     this.expressRouter.put(
       '/:id',
+      Authentication.canActivate,
+      Authorization.canActivate('ADMIN'),
       HandlerErrors.catchError(userController.update)
     );
 
     this.expressRouter.delete(
       '/:id',
+      Authentication.canActivate,
+      Authorization.canActivate('ADMIN'),
       HandlerErrors.catchError(userController.delete)
     );
 
     this.expressRouter.get(
       '/:id',
+      Authentication.canActivate,
+      Authorization.canActivate('ADMIN'),
       CacheRedis.handle(this.tagName),
       HandlerErrors.catchError(userController.listOne)
     );

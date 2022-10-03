@@ -36,12 +36,7 @@ class App {
 
   mountRoutes(): void {
     this.expressApp.use('/auth', new AuthRouter().expressRouter);
-    this.expressApp.use(
-      '/users',
-      Authentication.canActivate,
-      Authorization.canActivate('ADMIN'),
-      new RoutesUser().expressRouter
-    );
+    this.expressApp.use('/users', new RoutesUser().expressRouter);
     this.expressApp.use(
       '/drivers',
       Authentication.canActivate,
