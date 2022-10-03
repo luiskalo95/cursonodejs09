@@ -18,7 +18,7 @@ const redisBootstrap = new RedisBootstrap();
     console.log('Connected to database');
     console.log('Server started');
     console.log('Redis started');
-    console.log('All is ok');
+    console.log('Nuevo cambio');
   } catch (error) {
     // Logger(error);
     databaseBootstrap.closeConnection();
