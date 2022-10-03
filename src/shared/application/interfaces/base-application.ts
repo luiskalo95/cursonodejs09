@@ -1,8 +1,8 @@
-import { BaseRepository } from "../../../shared/domain/repositories/base-repository";
-import { Logger } from "../../../shared/helpers/logging.helper";
-import { Trace } from "../../../shared/helpers/trace.helper";
-import { DTOAbstract } from "./dtos/abstract.dto";
-import Result from "./result.interface";
+import { BaseRepository } from '../../../shared/domain/repositories/base-repository';
+import { Logger } from '../../../shared/helpers/logging.helper';
+import { Trace } from '../../../shared/helpers/trace.helper';
+import { DTOAbstract } from './dtos/abstract.dto';
+import Result from './result.interface';
 
 export class BaseApplication<T> {
   constructor(
@@ -40,10 +40,10 @@ export class BaseApplication<T> {
     order: { [s: string]: string }
   ): Promise<Result<T>> {
     Logger.getLogger().info({
-      typeElement: this.applicationName || "application",
-      typeAction: "list",
+      typeElement: this.applicationName || 'application',
+      typeAction: 'list',
       traceId: Trace.traceId(),
-      message: "List all drivers",
+      message: 'List all ' + this.applicationName.split('Application')[0] + 's',
       query: JSON.stringify({}),
       datetime: new Date(),
     });

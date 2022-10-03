@@ -3,7 +3,8 @@ import json
 
 class UserBehaviour_A(TaskSet):
     def on_start(self):
-        response = self.client.post("/auth/login", {"email": "sergio@correo.com","password": "123"})
+        response = self.client.post("/auth/login", {"email": "luis1995sep24@hotmail.com","password": "123456"})
+        print(response)
         self.accessToken=response.json()['payload']['data']['accessToken']
 
     @task(3)
@@ -12,11 +13,12 @@ class UserBehaviour_A(TaskSet):
 
     @task(1)
     def list_one_user(self):
-        self.client.get("/users/10",headers={"Authorization":  "Bearer {}".format(self.accessToken)})
+        self.client.get("/users/3",headers={"Authorization":  "Bearer {}".format(self.accessToken)})
 
 class UserBehaviour_B(TaskSet):
     def on_start(self):
-        response = self.client.post("/auth/login", {"email": "sergio@correo.com","password": "123"})
+        response = self.client.post("/auth/login", {"email": "luis1995sep24@hotmail.com","password": "123456"})
+        print(response)
         self.accessToken=response.json()['payload']['data']['accessToken']
 
     @task(5)
@@ -25,7 +27,7 @@ class UserBehaviour_B(TaskSet):
 
     @task(7)
     def list_one_user(self):
-        self.client.get("/users/1",headers={"Authorization":  "Bearer {}".format(self.accessToken)})
+        self.client.get("/users/4",headers={"Authorization":  "Bearer {}".format(self.accessToken)})
 
 class Test_A(HttpLocust):
     task_set = UserBehaviour_A

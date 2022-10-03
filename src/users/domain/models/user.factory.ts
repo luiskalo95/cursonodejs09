@@ -1,6 +1,6 @@
-import { PasswordService } from "../services/password.service";
-import { TokensService } from "../services/tokens.service";
-import { UserModel } from "./user.model";
+import { PasswordService } from '../services/password.service';
+import { TokensService } from '../services/tokens.service';
+import { UserModel } from './user.model';
 
 export interface IUser {
   id: number;
@@ -19,7 +19,7 @@ export interface IUser {
 }
 
 export class UserFactory {
-  create(user: Partial<IUser>) {
+  create(user: Partial<IUser>): UserModel {
     const id = user.id || 0;
     const name = user.name;
     const age = user.age;
@@ -34,8 +34,8 @@ export class UserFactory {
     const deletedAt = new Date();
     const active = user.active || true;
 
-    if (name.trim() === "" || name.trim().length < 4) {
-      throw new Error("Invalid name");
+    if (name.trim() === '' || name.trim().length < 4) {
+      throw new Error('Invalid name');
     }
 
     return new UserModel(

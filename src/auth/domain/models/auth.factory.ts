@@ -1,4 +1,4 @@
-import { AuthModel } from "./auth.model";
+import { AuthModel } from './auth.model';
 
 export interface IAuth {
   email: string;
@@ -6,18 +6,11 @@ export interface IAuth {
 }
 
 export class AuthFactory {
-  create(auth: IAuth) {
+  create(auth: IAuth): AuthModel {
     const email = auth.email;
     const password = auth.password;
-
-    if (!email) {
-      throw new Error("Email is required");
-    }
-
-    if (!password) {
-      throw new Error("Password is required");
-    }
-
+    if (!email) throw new Error('Email is required');
+    if (!password) throw new Error('Password is required');
     return new AuthModel(email, password);
   }
 }

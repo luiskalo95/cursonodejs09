@@ -1,30 +1,28 @@
-import { RoleRepository } from "../../roles/domain/repositories/role.repository";
-import Result from "../../shared/application/interfaces/result.interface";
-import { BaseApplication } from "../../shared/application/interfaces/base-application";
-import { UserEntity } from "../domain/models/user.entity";
-import { UserModel } from "../domain/models/user.model";
-import { UserRepository } from "../domain/repositories/user.repository";
-import { UserDTO } from "./dtos/dto";
+import { RoleRepository } from '../../roles/domain/repositories/role.repository';
+import Result from '../../shared/application/interfaces/result.interface';
+import { BaseApplication } from '../../shared/application/interfaces/base-application';
+import { UserModel } from '../domain/models/user.model';
+import { UserRepository } from '../domain/repositories/user.repository';
+import { UserDTO } from './dtos/dto';
 
 export class UserApplication extends BaseApplication<UserModel> {
   constructor(
-    private repositoryUser: UserRepository,
-    private repositoryModel: RoleRepository
+    private userRepository: UserRepository,
+    private roleRepository: RoleRepository
   ) {
-    super(repositoryUser, new UserDTO(), "UserApplication");
+    super(userRepository, new UserDTO(), 'UserApplication');
   }
 
-  override async add(entity: UserModel): Promise<Result<UserModel>> {
-    if (entity.roles.length > 0) {
-      const roles = await this.repositoryModel.findByIds(
-        entity.roles as number[]
+  override async add(userModel: UserModel): Promise<Result<UserModel>> {
+    if (userModel.roles.length > 0) {
+      const roles = await this.roleRepository.findByIds(
+        userModel.roles as number[]
       );
-      entity.roles = roles;
+      userModel.roles = roles;
     } else {
-      delete entity.roles;
+      delete userModel.roles;
     }
-
-    const result = await this.repositoryUser.insert(entity);
+    const result = await this.userRepository.insert(userModel);
     return new UserDTO().mapping(result);
   }
 }

@@ -1,6 +1,6 @@
-import Result from "../../../shared/application/interfaces/result.interface";
-import { BaseRepository } from "../../../shared/domain/repositories/base-repository";
-import { DriverModel } from "../models/driver.model";
+import Result from '../../../shared/application/interfaces/result.interface';
+import { BaseRepository } from '../../../shared/domain/repositories/base-repository';
+import { DriverModel } from '../models/driver.model';
 
 export interface DriverRepository extends BaseRepository<DriverModel, number> {
   getAll(where: object): Promise<Result<DriverModel>>;

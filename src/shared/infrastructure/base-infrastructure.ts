@@ -1,10 +1,10 @@
-import { ObjectType, Repository } from "typeorm";
-import DatabaseBootstrap from "../../bootstrap/database.bootstrap";
-import * as _ from "lodash";
-import Result from "../application/interfaces/result.interface";
-import { ResponseDto } from "../application/interfaces/dtos/response.dto";
-import { Trace } from "../helpers/trace.helper";
-import { Logger } from "../helpers/logging.helper";
+import { ObjectType, Repository } from 'typeorm';
+import DatabaseBootstrap from '../../bootstrap/database.bootstrap';
+import * as _ from 'lodash';
+import Result from '../application/interfaces/result.interface';
+import { ResponseDto } from '../application/interfaces/dtos/response.dto';
+import { Trace } from '../helpers/trace.helper';
+import { Logger } from '../helpers/logging.helper';
 
 export abstract class BaseInfrastructure<T> {
   constructor(
@@ -19,29 +19,19 @@ export abstract class BaseInfrastructure<T> {
   ): Promise<Result<T>> {
     const dataSource = DatabaseBootstrap.dataSource;
     const repository: Repository<T> = dataSource.getRepository(this.entity);
-    let recordToUpdate: any = await repository.findOne({
-      where,
-      relations,
-    });
-
+    let recordToUpdate: any = await repository.findOne({ where, relations });
     recordToUpdate = _.merge(recordToUpdate, entity); // {id, name, lastname, age}    {name}
     await repository.save(recordToUpdate);
-
     return ResponseDto<T>(Trace.traceId(), recordToUpdate);
-
-    //recordToUpdate = Object.assign(recordToUpdate, entity); // {id, name, lastname, age}    {name}
+    // recordToUpdate = Object.assign(recordToUpdate, entity); // {id, name, lastname, age}    {name}
   }
 
   async delete(where: object): Promise<Result<T>> {
     const dataSource = DatabaseBootstrap.dataSource;
     const repository: Repository<T> = dataSource.getRepository(this.entity);
-    let recordToDelete: any = await repository.findOne({
-      where,
-    });
-
+    let recordToDelete: any = await repository.findOne({ where });
     recordToDelete = _.merge(recordToDelete, { active: false });
     await repository.save(recordToDelete);
-
     return ResponseDto<T>(Trace.traceId(), recordToDelete);
   }
 
@@ -52,7 +42,6 @@ export abstract class BaseInfrastructure<T> {
     const dataSource = DatabaseBootstrap.dataSource;
     const repository: Repository<T> = dataSource.getRepository(this.entity);
     const data: T = await repository.findOne({ where, relations });
-
     return ResponseDto<T>(Trace.traceId(), data);
   }
 
@@ -63,23 +52,21 @@ export abstract class BaseInfrastructure<T> {
   ): Promise<Result<T>> {
     Logger.getLogger().info({
       typeElement: this.infrastructureName,
-      typeAction: "list",
+      typeAction: 'list',
       traceId: Trace.traceId(),
-      message: "List all drivers",
+      message:
+        'List all ' + this.infrastructureName.split('Infrastructure')[0] + 's',
       query: JSON.stringify({}),
       datetime: new Date(),
     });
     const dataSource = DatabaseBootstrap.dataSource;
     const repository: Repository<T> = dataSource.getRepository(this.entity);
-
     const _where = Object.assign(where, { active: true });
-
     const data: T[] = await repository.find({
       where: _where,
       relations,
       order,
     });
-
     return ResponseDto<T>(Trace.traceId(), data);
   }
 
@@ -88,7 +75,6 @@ export abstract class BaseInfrastructure<T> {
     const repository: Repository<T> = dataSource.getRepository(this.entity);
     const instance = repository.create(entity);
     const data: T = await repository.save(instance);
-
     return ResponseDto<T>(Trace.traceId(), data);
   }
 
@@ -108,7 +94,6 @@ export abstract class BaseInfrastructure<T> {
       skip: page * pageSize,
       take: pageSize,
     });
-
     return ResponseDto<T>(Trace.traceId(), data, total);
   }
 }

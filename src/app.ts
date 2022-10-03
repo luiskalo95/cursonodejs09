@@ -1,12 +1,12 @@
-import express, { Application, Request, Response } from "express";
-import RoutesUser from "./users/interfaces/http/users.route";
-import RoutesDriver from "./drivers/interfaces/drivers.route";
-import AuthRouter from "./auth/interfaces/auth.route";
-import { HandlerErrors } from "./shared/helpers/errors.helper";
-import { Authentication } from "./shared/middlewares/authentication.guard";
-import { Authorization } from "./shared/middlewares/authorization.guard";
-import multer from "multer";
-import helmet from "helmet";
+import express, { Application, Request, Response } from 'express';
+import RoutesUser from './users/infrastructure/http/users.route';
+import RoutesDriver from './drivers/infrastructure/http/drivers.route';
+import AuthRouter from './auth/infrastructure/http/auth.route';
+import { HandlerErrors } from './shared/helpers/errors.helper';
+import { Authentication } from './shared/middlewares/authentication.guard';
+import { Authorization } from './shared/middlewares/authorization.guard';
+import multer from 'multer';
+import helmet from 'helmet';
 
 class App {
   expressApp: Application;
@@ -20,7 +20,7 @@ class App {
     this.mountErrors();
   }
 
-  init() {
+  init(): void {
     multer({
       limits: {
         fileSize: 8000000,
@@ -35,32 +35,31 @@ class App {
   }
 
   mountRoutes(): void {
+    this.expressApp.use('/auth', new AuthRouter().expressRouter);
     this.expressApp.use(
-      "/users",
+      '/users',
       Authentication.canActivate,
-      Authorization.canActivate("ADMIN"),
+      Authorization.canActivate('ADMIN'),
       new RoutesUser().expressRouter
     );
     this.expressApp.use(
-      "/drivers",
+      '/drivers',
       Authentication.canActivate,
-      Authorization.canActivate("ADMIN", "OPERATOR"),
+      Authorization.canActivate('ADMIN', 'OPERATOR'),
       new RoutesDriver().expressRouter
     );
-    this.expressApp.use("/auth", new AuthRouter().expressRouter);
   }
 
   mountHealthCheck(): void {
-    this.expressApp.get("/", (req: Request, res: Response) => {
-      res.send("All is good!");
+    this.expressApp.get('/', (req: Request, res: Response) => {
+      res.send('All is good!');
     });
-
-    this.expressApp.get("/healthcheck", (req, res) => {
-      res.send("All is good!");
+    this.expressApp.get('/healthcheck', (req, res) => {
+      res.send('All is good!');
     });
   }
 
-  mountErrors() {
+  mountErrors(): void {
     this.expressApp.use(HandlerErrors.notFound);
     this.expressApp.use(HandlerErrors.generic);
   }

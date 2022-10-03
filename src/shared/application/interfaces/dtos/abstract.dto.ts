@@ -1,4 +1,4 @@
-import Result from "../result.interface";
+import Result from '../result.interface';
 
 export abstract class DTOAbstract<T> {
   abstract callback(result: Result<T>): Result<T>;

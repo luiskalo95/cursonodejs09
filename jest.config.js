@@ -6,17 +6,17 @@ module.exports = {
   reporters: [
     `default`,
     [
-      `jest-html-reporters`,
-      {
-        publicPath: `reports`,
-        filename: `test.v2.html`,
-      },
-    ],
-    [
       `./node_modules/jest-html-reporter`,
       {
         pageTitle: `Test API`,
         outputPath: `reports/test.v1.html`,
+      },
+    ],
+    [
+      `jest-html-reporters`,
+      {
+        publicPath: `reports`,
+        filename: `test.v2.html`,
       },
     ],
   ],

@@ -1,4 +1,4 @@
-import { RoleEntity } from "../../../roles/domain/models/role.entity";
+import { RoleEntity } from '../../../roles/domain/models/role.entity';
 export class UserModel {
   constructor(
     public id: number,

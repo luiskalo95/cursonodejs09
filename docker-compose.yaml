@@ -73,13 +73,13 @@ services:
     container_name: master
     ports:
       - "8089:8089"
-    command: "--host=https://4c52-38-25-16-207.ngrok.io --master"
+    command: "--host=https://57ba-2800-e2-9680-2953-cd15-46b7-7298-3097.ngrok.io --master"
 
   locust-slave:
     build:
       context: .
       dockerfile: locust/Dockerfile
-    command: "--host=https://4c52-38-25-16-207.ngrok.io --master-host=locust-master --slave"
+    command: "--host=https://57ba-2800-e2-9680-2953-cd15-46b7-7298-3097.ngrok.io --master-host=locust-master --slave"
 volumes:
   vol-mysql-nodejs09:
   vol-elasticsearch:

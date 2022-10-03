@@ -1,4 +1,4 @@
-import { DriverModel } from "./driver.model";
+import { DriverModel } from './driver.model';
 
 export interface IDriver {
   id: number;
@@ -9,25 +9,15 @@ export interface IDriver {
 }
 
 export class DriverFactory {
-  create(driver: Partial<IDriver>) {
+  create(driver: Partial<IDriver>): DriverModel {
     const id = driver.id || 0;
     const name = driver.name;
     const lastname = driver.lastname;
     const licenseDriver = driver.licenseDriver;
     const active = driver.active || true;
-
-    if (!name) {
-      throw new Error("Driver name is required");
-    }
-
-    if (!lastname) {
-      throw new Error("Driver lastname is required");
-    }
-
-    if (!licenseDriver) {
-      throw new Error("Driver licenseDriver is required");
-    }
-
+    if (!name) throw new Error('Driver name is required');
+    if (!lastname) throw new Error('Driver lastname is required');
+    if (!licenseDriver) throw new Error('Driver licenseDriver is required');
     return new DriverModel(id, name, lastname, licenseDriver, active);
   }
 }

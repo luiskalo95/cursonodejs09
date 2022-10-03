@@ -1,17 +1,16 @@
-import { Request, Response, NextFunction } from "express";
-import { TokensService } from "../../users/domain/services/tokens.service";
-import { IError } from "../helpers/errors.helper";
+import { Request, Response, NextFunction } from 'express';
+import { TokensService } from '../../users/domain/services/tokens.service';
+import { IError } from '../helpers/errors.helper';
 
 export class Authentication {
-  static canActivate(req: Request, res: Response, next: NextFunction) {
+  private constructor() {}
+
+  static canActivate(req: Request, res: Response, next: NextFunction): void {
     const headerAuthentication = req.headers.authorization;
-
     if (headerAuthentication) {
-      const partsHeaderAuthentication = headerAuthentication.split(" ");
-
+      const partsHeaderAuthentication = headerAuthentication.split(' ');
       if (partsHeaderAuthentication.length === 2) {
         const accessToken = partsHeaderAuthentication[1];
-
         TokensService.validateAccessToken(accessToken)
           .then((payload: any) => {
             res.locals.roles = payload.roles;
@@ -23,12 +22,12 @@ export class Authentication {
             next(error);
           });
       } else {
-        const error: IError = new Error("You are not authorized");
+        const error: IError = new Error('You are not authorized');
         error.status = 401;
         next(error);
       }
     } else {
-      const error: IError = new Error("You are not authorized");
+      const error: IError = new Error('You are not authorized');
       error.status = 401;
       next(error);
     }

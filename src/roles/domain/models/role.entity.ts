@@ -1,15 +1,15 @@
-import { UserEntity } from "../../../users/domain/models/user.entity";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { UserEntity } from '../../../users/infrastructure/adapters/entities/user.entity';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: "role" })
+@Entity({ name: 'role' })
 export class RoleEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "varchar", length: 50 })
+  @Column({ type: 'varchar', length: 50 })
   roleName: string;
 
-  @Column({ type: "boolean", default: true })
+  @Column({ type: 'boolean', default: true })
   active: boolean;
 
   @ManyToMany((type) => UserEntity, (user) => user.roles)

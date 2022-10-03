@@ -1,12 +1,13 @@
 import { UserApplication } from "../../../src/users/application/user.application";
 import mockUsers from "../mocks/users.json";
-import { UserInfrastructure } from "../../../src/users/infrastructure/user.infrastructure";
 import { RoleInfrastructure } from "../../../src/roles/infrastructure/role.infrastructure";
-import { UserController } from "../../../src/users/interfaces/http/user.controller";
+import { UserInfrastructure } from "../../../src/users/infrastructure/adapters/user.infrastructure";
+import { UserController } from "../../../src/users/infrastructure/http/users.controller";
 
-export class MockUserApplication {
-  private userInfra: any;
-  private roleInfra: any;
+export class UserApplicationMock {
+
+  private userInfrastructure: any;
+  private roleInfrastructure: any;
 
   constructor() {
     (UserApplication as jest.Mock) = jest.fn().mockReturnValue({
@@ -23,10 +24,9 @@ export class MockUserApplication {
   }
 
   getController() {
-    this.userInfra = new UserInfrastructure();
-    this.roleInfra = new RoleInfrastructure();
-    const userApplication = new UserApplication(this.userInfra, this.roleInfra);
-
+    this.userInfrastructure = new UserInfrastructure();
+    this.roleInfrastructure = new RoleInfrastructure();
+    const userApplication = new UserApplication(this.userInfrastructure, this.roleInfrastructure);
     return new UserController(userApplication);
   }
 

@@ -16,8 +16,9 @@ const tokens = {
 const TIMEOUT = 24 * 60 * 60 * 1000;
 
 describe("user route", () => {
+
   beforeAll(async () => {
-    await databaseBootstrap.initialize();
+    await databaseBootstrap.initializeDB();
     await redisBootstrap.initialize();
   });
 
@@ -26,60 +27,27 @@ describe("user route", () => {
     redisBootstrap.getConnection().disconnect();
   });
 
-  it(
-    "list users without token",
-    async () => {
-      //Preparación
-      const rq = request(app);
+  it("list users without token", async () => {
+    const rq = request(app);
+    const response: any = await rq.get("/users");
+    expect(response.status).toBe(401);
+    expect(response.res.statusMessage).toBe("Unauthorized");
+  }, TIMEOUT);
 
-      //Ejecución
-      const response: any = await rq.get("/users");
+  it("list users with token valid", async () => {
+    const rq = request(app);
+    const response: any = await rq.get("/users").set("authorization", `Bearer ${tokens.VALID}`);
+    console.log("response text", response.text);
+    expect(JSON.parse(response.text)).toHaveProperty("traceId");
+    expect(JSON.parse(response.text)).toHaveProperty("payload");
+    expect(JSON.parse(response.text)).toHaveProperty("payload.data");
+    expect(Array.isArray(JSON.parse(response.text).payload.data)).toBeTruthy();
+  }, TIMEOUT);
 
-      //Comprobación
-      expect(response.status).toBe(401);
-      expect(response.res.statusMessage).toBe("Unauthorized");
-    },
-    TIMEOUT
-  );
-
-  it(
-    "list users with token valid",
-    async () => {
-      //Preparación
-      const rq = request(app);
-
-      //Ejecución
-      const response: any = await rq
-        .get("/users")
-        .set("authorization", `Bearer ${tokens.VALID}`);
-
-      //Comprobación
-      console.log("response text", response.text);
-      expect(JSON.parse(response.text)).toHaveProperty("traceId");
-      expect(JSON.parse(response.text)).toHaveProperty("payload");
-      expect(JSON.parse(response.text)).toHaveProperty("payload.data");
-      expect(
-        Array.isArray(JSON.parse(response.text).payload.data)
-      ).toBeTruthy();
-    },
-    TIMEOUT
-  );
-
-  it(
-    "list users with token invalid",
-    async () => {
-      //Preparación
-      const rq = request(app);
-
-      //Ejecución
-      const response: any = await rq
-        .get("/users")
-        .set("authorization", `Bearer ${tokens.INVALID}`);
-
-      //Comprobación
-      expect(response.status).toBe(401);
-      expect(response.res.statusMessage).toBe("Unauthorized");
-    },
-    TIMEOUT
-  );
+  it("list users with token invalid", async () => {
+    const rq = request(app);
+    const response: any = await rq.get("/users").set("authorization", `Bearer ${tokens.INVALID}`);
+    expect(response.status).toBe(401);
+    expect(response.res.statusMessage).toBe("Unauthorized");
+  }, TIMEOUT);
 });

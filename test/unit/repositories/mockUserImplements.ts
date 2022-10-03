@@ -1,9 +1,10 @@
-import { UserInfrastructure } from "../../../src/users/infrastructure/user.infrastructure";
 import { RoleInfrastructure } from "../../../src/roles/infrastructure/role.infrastructure";
 import { UserApplication } from "../../../src/users/application/user.application";
+import { UserInfrastructure } from "../../../src/users/infrastructure/adapters/user.infrastructure";
 import mockUsers from "../mocks/users.json";
 
-export class MockUserImplements {
+export class UserImplementsMock {
+
   private userInfra: any;
   private roleInfra: any;
 
@@ -11,7 +12,6 @@ export class MockUserImplements {
     (UserInfrastructure as jest.Mock) = jest.fn().mockReturnValue({
       findAll: jest.fn().mockResolvedValue(mockUsers),
     });
-
     (RoleInfrastructure as any) = jest.fn().mockReturnValue({
       findByIds: jest.fn(),
     });
@@ -20,7 +20,6 @@ export class MockUserImplements {
   getApplication() {
     this.userInfra = new UserInfrastructure();
     this.roleInfra = new RoleInfrastructure();
-
     return new UserApplication(this.userInfra, this.roleInfra);
   }
 
